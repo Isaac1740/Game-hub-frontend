@@ -1,0 +1,201 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Game Hub Design System - Premium, immersive, game-like dashboard */
+
+@layer base {
+  :root {
+    --background: 220 30% 97%;
+    --background-gradient-start: 210 60% 98%;
+    --background-gradient-end: 220 20% 100%;
+    --foreground: 220 25% 18%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 18%;
+    --card-glass: 0 0% 100% / 0.7;
+    --card-glass-border: 0 0% 100% / 0.8;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 20%;
+
+    --primary: 210 100% 50%;
+    --primary-light: 210 100% 60%;
+    --primary-glow: 210 100% 50% / 0.4;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 15% 94%;
+    --secondary-foreground: 220 20% 30%;
+
+    --muted: 220 15% 92%;
+    --muted-foreground: 220 10% 50%;
+
+    --accent: 28 100% 55%;
+    --accent-light: 28 100% 62%;
+    --accent-glow: 28 100% 55% / 0.4;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 20% 92%;
+    --input: 220 15% 90%;
+    --ring: 210 100% 52%;
+
+    --radius: 1rem;
+
+    /* Premium shadows */
+    --shadow-card: 0 4px 24px -6px hsl(220 40% 70% / 0.25), 0 2px 8px -2px hsl(220 40% 80% / 0.2);
+    --shadow-card-hover: 0 12px 40px -8px hsl(220 40% 60% / 0.35), 0 4px 16px -4px hsl(220 40% 70% / 0.25);
+    --shadow-blue-glow: 0 0 20px hsl(210 100% 50% / 0.35);
+    --shadow-orange-glow: 0 0 20px hsl(28 100% 55% / 0.35);
+    --shadow-btn-blue: 0 4px 16px -2px hsl(210 100% 50% / 0.4);
+    --shadow-btn-orange: 0 4px 16px -2px hsl(28 100% 55% / 0.4);
+
+    /* Icon backgrounds with gradient tint */
+    --icon-bg-blue: 210 100% 96%;
+    --icon-bg-blue-gradient: linear-gradient(135deg, hsl(210 100% 97%), hsl(210 80% 94%));
+    --icon-bg-orange: 28 100% 96%;
+    --icon-bg-orange-gradient: linear-gradient(135deg, hsl(28 100% 97%), hsl(28 80% 93%));
+
+    --navbar-bg: 0 0% 100% / 0.85;
+    --tab-underline: 210 100% 52%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 220 25% 8%;
+    --background-gradient-start: 220 30% 10%;
+    --background-gradient-end: 220 20% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 220 25% 12%;
+    --card-foreground: 210 40% 98%;
+    --card-glass: 220 25% 14% / 0.7;
+    --card-glass-border: 220 20% 20% / 0.8;
+
+    --popover: 220 20% 14%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 100% 55%;
+    --primary-light: 210 100% 65%;
+    --primary-glow: 210 100% 55% / 0.5;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 15% 20%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 220 15% 18%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 28 100% 52%;
+    --accent-light: 28 100% 60%;
+    --accent-glow: 28 100% 52% / 0.5;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+    --ring: 210 100% 55%;
+
+    --shadow-card: 0 4px 24px -6px hsl(220 40% 5% / 0.5);
+    --shadow-card-hover: 0 12px 40px -8px hsl(220 40% 5% / 0.6);
+
+    --icon-bg-blue: 210 100% 20%;
+    --icon-bg-blue-gradient: linear-gradient(135deg, hsl(210 60% 18%), hsl(210 50% 14%));
+    --icon-bg-orange: 28 100% 20%;
+    --icon-bg-orange-gradient: linear-gradient(135deg, hsl(28 60% 18%), hsl(28 50% 14%));
+
+    --navbar-bg: 220 25% 10% / 0.9;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer components {
+  .bg-page-gradient {
+    background: linear-gradient(
+      165deg,
+      hsl(var(--background-gradient-start)) 0%,
+      hsl(var(--background-gradient-end)) 100%
+    );
+  }
+
+  .glass-card {
+    background: hsl(var(--card-glass));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--card-glass-border));
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-card-hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .icon-glow-blue {
+    box-shadow: var(--shadow-blue-glow);
+  }
+
+  .icon-glow-orange {
+    box-shadow: var(--shadow-orange-glow);
+  }
+
+  .btn-glow-blue {
+    box-shadow: var(--shadow-btn-blue);
+  }
+
+  .btn-glow-orange {
+    box-shadow: var(--shadow-btn-orange);
+  }
+
+  .icon-bg-blue-gradient {
+    background: var(--icon-bg-blue-gradient);
+  }
+
+  .icon-bg-orange-gradient {
+    background: var(--icon-bg-orange-gradient);
+  }
+}
+
+.btn {
+  background: #10b981;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+.btn:hover {
+  background: #059669;
+}
