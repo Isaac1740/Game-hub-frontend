@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const BASE_URL = "http://127.0.0.1:5000";
 
@@ -15,21 +15,15 @@ const Chess = () => {
   const [board, setBoard] = useState<Board>([]);
   const [turn, setTurn] = useState("white");
   const [mode, setMode] = useState<"pvp" | "pva" | "">("");
-  const [difficulty, setDifficulty] = useState("easy");
   const [selected, setSelected] = useState<[number, number] | null>(null);
-  const [status, setStatus] = useState("Select Game Mode");
   const [paused, setPaused] = useState(false);
   const [gameActive, setGameActive] = useState(false);
 
   // =========================
-  // LOAD GAME
+  // LOAD STATE
   // =========================
   const loadGame = async () => {
-    const res = await fetch(`${BASE_URL}/api/chess/state`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mode, difficulty }),
-    });
+    const res = await fetch(`${BASE_URL}/api/chess/state`);
     const data = await res.json();
     setBoard(data.board);
     setTurn(data.turn);
@@ -40,11 +34,19 @@ const Chess = () => {
   // =========================
   const startGame = async (m: "pvp" | "pva", diff: string) => {
     setMode(m);
-    setDifficulty(diff);
     setPaused(false);
     setGameActive(true);
     setSelected(null);
-    await loadGame();
+
+    const res = await fetch(`${BASE_URL}/api/chess/start`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mode: m, difficulty: diff }),
+    });
+
+    const data = await res.json();
+    setBoard(data.board);
+    setTurn(data.turn);
   };
 
   // =========================
@@ -56,18 +58,24 @@ const Chess = () => {
     if (!selected) {
       if (board[i][j] === ".") return;
 
+      const piece = board[i][j];
+
+      const isWhitePiece = piece === piece.toUpperCase();
+      const isBlackPiece = piece === piece.toLowerCase();
+
       if (
-        (mode === "pvp" && (
-          (turn === "white" && board[i][j] === board[i][j].toUpperCase()) ||
-          (turn === "black" && board[i][j] === board[i][j].toLowerCase())
-        )) ||
-        (mode === "pva" && turn === "white" && board[i][j] === board[i][j].toUpperCase())
+        (mode === "pvp" &&
+          ((turn === "white" && isWhitePiece) ||
+            (turn === "black" && isBlackPiece))) ||
+        (mode === "pva" && turn === "white" && isWhitePiece)
       ) {
         setSelected([i, j]);
       }
+
       return;
     }
 
+    // Attempt Move
     const res = await fetch(`${BASE_URL}/api/chess/player`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -84,17 +92,13 @@ const Chess = () => {
     setSelected(null);
     await loadGame();
 
+    // Agent Move
     if (mode === "pva" && data.turn === "black") {
-      setTimeout(agentMove, 600);
+      setTimeout(async () => {
+        await fetch(`${BASE_URL}/api/chess/agent`, { method: "POST" });
+        await loadGame();
+      }, 600);
     }
-  };
-
-  // =========================
-  // AGENT MOVE
-  // =========================
-  const agentMove = async () => {
-    await fetch(`${BASE_URL}/api/chess/agent`, { method: "POST" });
-    await loadGame();
   };
 
   return (
@@ -103,24 +107,36 @@ const Chess = () => {
 
       {mode === "" && (
         <div className="flex justify-center gap-4 mb-6">
-          <button onClick={() => startGame("pva", "easy")} className="btn">Player vs Agent (Easy)</button>
-          <button onClick={() => startGame("pva", "hard")} className="btn">Player vs Agent (Hard)</button>
-          <button onClick={() => startGame("pvp", "easy")} className="btn">Player vs Player</button>
+          <button onClick={() => startGame("pva", "easy")} className="btn">
+            Player vs Agent (Easy)
+          </button>
+          <button onClick={() => startGame("pva", "hard")} className="btn">
+            Player vs Agent (Hard)
+          </button>
+          <button onClick={() => startGame("pvp", "easy")} className="btn">
+            Player vs Player
+          </button>
         </div>
       )}
 
       <div className="text-center mb-4 font-semibold">
-        {paused ? "⏸ Game Paused" :
-          mode === "pvp"
-            ? turn === "white" ? "⚪ Player 1 Turn" : "⚫ Player 2 Turn"
-            : turn === "white" ? "⚪ Your Turn" : "🤖 Agent Turn"}
+        {paused
+          ? "⏸ Game Paused"
+          : mode === "pvp"
+          ? turn === "white"
+            ? "⚪ Player 1 Turn"
+            : "⚫ Player 2 Turn"
+          : turn === "white"
+          ? "⚪ Your Turn"
+          : "🤖 Agent Turn"}
       </div>
 
       <div className="grid grid-cols-8 w-[480px] mx-auto border border-gray-700">
         {board.map((row, i) =>
           row.map((cell, j) => {
             const isWhite = (i + j) % 2 === 0;
-            const isSelected = selected && selected[0] === i && selected[1] === j;
+            const isSelected =
+              selected && selected[0] === i && selected[1] === j;
 
             return (
               <div
@@ -138,11 +154,19 @@ const Chess = () => {
         )}
       </div>
 
-      <div className="flex justify-center gap-4 mt-6">
-        <button onClick={() => setPaused(true)} className="btn">⏸ Pause</button>
-        <button onClick={() => setPaused(false)} className="btn">▶ Resume</button>
-        <button onClick={loadGame} className="btn">🔄 Restart</button>
-      </div>
+      {mode !== "" && (
+        <div className="flex justify-center gap-4 mt-6">
+          <button onClick={() => setPaused(true)} className="btn">
+            ⏸ Pause
+          </button>
+          <button onClick={() => setPaused(false)} className="btn">
+            ▶ Resume
+          </button>
+          <button onClick={loadGame} className="btn">
+            🔄 Refresh
+          </button>
+        </div>
+      )}
     </div>
   );
 };
